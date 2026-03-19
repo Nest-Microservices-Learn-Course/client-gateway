@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Delete,
   Get,
@@ -9,8 +10,10 @@ import {
   Query,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 import { PaginationDto } from 'src/commons';
 import { PRODUCT_SERVICES } from 'src/config';
+import { Product } from './entities';
 
 @Controller('products')
 export class ProductsController {
@@ -32,8 +35,15 @@ export class ProductsController {
   }
 
   @Get(':id')
-  findOneProduct(@Param('id') id: string) {
-    return `Get one product: ${id}`;
+  async findOneProduct(@Param('id') id: string) {
+    try {
+      const product: Product = await firstValueFrom(
+        this.productsClient.send({ cmd: 'find_one_product' }, { id }),
+      );
+      return product;
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
   @Patch(':id')

@@ -4,7 +4,8 @@ import {
   Post,
   Body,
   Param,
-  ParseIntPipe,
+  ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Inject } from '@nestjs/common';
@@ -12,6 +13,7 @@ import { ORDER_SERVICES } from 'src/config';
 import { ClientProxy } from '@nestjs/microservices';
 import { catchError } from 'rxjs';
 import { RpcException } from '@nestjs/microservices';
+import { OrderPaginationDto } from 'src/commons';
 
 @Controller('orders')
 export class OrdersController {
@@ -30,8 +32,8 @@ export class OrdersController {
   }
 
   @Get()
-  findAll() {
-    return this.ordersClient.send('findAllOrders', {}).pipe(
+  findAll(@Query() orderPaginationDto: OrderPaginationDto) {
+    return this.ordersClient.send('findAllOrders', orderPaginationDto).pipe(
       catchError((err) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         throw new RpcException(err);
@@ -40,8 +42,8 @@ export class OrdersController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.ordersClient.send('findOneOrder', id).pipe(
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.ordersClient.send('findOneOrder', { id }).pipe(
       catchError((err) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         throw new RpcException(err);

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-base-to-string */
 import { Catch, ArgumentsHost, ExceptionFilter } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { Response } from 'express';
@@ -28,6 +29,15 @@ export class RpcCustomExceptionFilter implements ExceptionFilter<RpcException> {
     const response = ctx.getResponse<Response>();
 
     const rpcError = exception.getError();
+
+    if (rpcError.toString().includes('Empty response')) {
+      return response.status(500).json({
+        status: 500,
+        message: rpcError
+          .toString()
+          .substring(0, rpcError.toString().indexOf('(') - 1),
+      });
+    }
 
     if (isRpcError(rpcError)) {
       return response.status(rpcError.status).json(rpcError);

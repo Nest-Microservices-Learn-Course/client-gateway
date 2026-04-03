@@ -10,7 +10,7 @@ This is a client gateway built with NestJS framework that serves as the communic
 
 Before you begin, ensure you have the following installed:
 - Node.js (v18 or higher)
-- npm or yarn
+- npm or yarn or pnpm
 - Git
 - Docker (for NATS server)
 
@@ -33,6 +33,9 @@ npm install
 
 # Or using yarn
 yarn install
+
+# Or using pnpm
+pnpm install
 ```
 
 ### 3. Environment Configuration
@@ -67,6 +70,9 @@ npm run start:dev
 
 # Or using yarn
 yarn start:dev
+
+# Or using pnpm
+pnpm start:dev
 ```
 
 The application will start in watch mode with hot reload on port 3000.
@@ -79,12 +85,25 @@ npm run build
 
 # Run in production mode
 npm run start:prod
+
+# Or using yarn
+yarn start:prod
+
+# Or using pnpm
+pnpm start:prod
 ```
 
 ### Debug Mode
 
 ```bash
+# Using npm
 npm run start:debug
+
+# Or using yarn
+yarn start:debug
+
+# Or using pnpm
+pnpm start:debug
 ```
 
 ## Available Scripts

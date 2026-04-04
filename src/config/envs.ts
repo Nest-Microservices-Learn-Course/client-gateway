@@ -26,5 +26,5 @@ const envVars: EnvVars = validationResult.value as EnvVars;
 
 export const envs = {
   port: envVars.PORT,
-  natsServer: envVars.NATS_SERVERS,
+  natsServers: envVars.NATS_SERVERS,
 };
